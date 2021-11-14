@@ -61,7 +61,6 @@
               id="reserveForm"
               action="index.html"
               method="get"
-              onsubmit="return validate();"
             >
               <div
                 class="formData">
@@ -109,7 +108,8 @@
               <div
                 class="formData">
                 <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" required>
+                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+                <small></small>
               </div>
               <p class="text-label">Quelles villes ?</p>
               <div
@@ -191,11 +191,11 @@
                   name="checkbox1"
                   checked
                 />
-                <label class="checkbox2-label" for="checkbox1">
+                <label class="checkbox2-label" for="checkbox1" id="cgv-label">
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
-                <br>
+                <small></small>
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />
                 <label class="checkbox2-label" for="checkbox2">
                   <span class="checkbox-icon"></span>

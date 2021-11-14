@@ -53,11 +53,12 @@ function validName(inputName) {
   let small = inputName.nextElementSibling;
 
   if (testName) {
-    small.innerHTML = ""
+    small.innerHTML = '';
+    return true;
   } else {
-    small.innerHTML = "Ce champ doit comprendre au moins 2 caractères."
+    small.innerHTML = 'Ce champ doit comprendre au moins 2 caractères.';
+    return false;
   }
-  return testName;
 }
 
 // Listening if the email input is modified and checking if it is correct against the validEmail function
@@ -74,31 +75,70 @@ function validEmail(inputEmail) {
   let testEmail = regexp.test(inputEmail.value);
   let small = inputEmail.nextElementSibling;
 
-    if (testEmail) {
-      small.innerHTML = '';
-    } else {
-      small.innerHTML = "L'email indiqué semble incorrect";
-    }
-  return testEmail;
+  if (testEmail) {
+    small.innerHTML = '';
+    return true;
+  } else {
+    small.innerHTML = "L'email indiqué semble incorrect";
+    return false;
+  }
 }
 
-// Listening if a radio button is selected
-submit.addEventListener('click', function (e) {
-  e.preventDefault();
+// Listening if the number of tournament participation is correct
+reserveForm.quantity.addEventListener('input', function () {
+  
+  let small = this.nextElementSibling;
+
+  if (this.value >= 0 && this.value <= 99) {
+    small.innerHTML = '';
+  } else {
+    small.innerHTML = 'Veuillez renseigner une valeur comprise entre 0 et 99';
+  }
+});
+
+// Listening if a location is selected
+reserveForm.addEventListener('change', function () {
+  locationSelect();
+});
+
+function locationSelect() {
   const radioSelect = document.querySelectorAll('input[name="location"]');
-  let selectedValue;
+  let radioValue;
   for (const choice of radioSelect) {
     if (choice.checked) {
-      selectedValue = true;
-      return selectedValue;
-    }
+      console.log(choice.value);
+      radioValue = choice.value;
+    } 
+  }
+  if (!radioValue) {
+    console.log('merci de saisir une location');
+    return false;
+  } else {
+    console.log('ok location');
+    return true;
+  }
+};
+
+// Listening if a radio button is selected
+reserveForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  if (validName(reserveForm.first) && validName(reserveForm.last) && validEmail(reserveForm.email)){
+    console.log("on peut envoyer");
+  } else {
+    console.log("il manque une ou plusieurs données correctes");
   }
 
-  // Listening if the checkbox1 is checked
+  // Listening if the terms and conditions checkbox is checked
   let checkBoxValidation = document.getElementById('checkbox1').checked;
+  let small = document.getElementById('cgv-label').nextElementSibling;
 
   if (!checkBoxValidation) {
-    console.log('unchecked cgv')
+    small.innerHTML = "Veuillez accepter les conditions d'utilisation";
+    small.classList.add('small-cgv');
+    return false;
+  } else {
+    small.innerHTML = '';
+    return true;
   }
-  return checkBoxValidation;
 });

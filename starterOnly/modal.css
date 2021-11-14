@@ -144,6 +144,12 @@ small {
   color: #ff0000;
 }
 
+.small-cgv {
+  display: block;
+  margin-top: 3px;
+  font-size: .5em;
+}
+
 .button {
   background: #fe142f;
   margin-top: 0.5em;
