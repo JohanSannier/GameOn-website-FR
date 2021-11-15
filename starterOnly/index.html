@@ -103,7 +103,9 @@
                   type="date"
                   id="birthdate"
                   name="birthdate"
-                /><br>
+                />
+                <small></small>
+                <br>
               </div>
               <div
                 class="formData">
@@ -113,7 +115,8 @@
               </div>
               <p class="text-label">Quelles villes ?</p>
               <div
-                class="formData">
+                class="formData"
+                id="radio-wrapper">
                 <input
                   class="checkbox-input"
                   type="radio"
@@ -181,6 +184,7 @@
                   Portland</label
                 >
               </div>
+              <small></small>
 
               <div
                 class="formData">
@@ -190,6 +194,7 @@
                   id="checkbox1"
                   name="checkbox1"
                   checked
+                  value="cgv"
                 />
                 <label class="checkbox2-label" for="checkbox1" id="cgv-label">
                   <span class="checkbox-icon"></span>
@@ -215,6 +220,9 @@
         </div>
       </div>
     </main>
+    <div class="hidden" id="thank-you">
+      <!-- <span class="close" id="close-btn-thanks"></span> -->
+    </div>
     <footer>
       <p class="copyrights">
         Copyright 2014 - 2020, GameOn Inc.

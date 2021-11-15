@@ -12,12 +12,14 @@ const modalbg = document.querySelector('.bground');
 const modalBtn = document.querySelectorAll('.modal-btn');
 const formData = document.querySelectorAll('.formData');
 const closeForm = document.getElementById('close-btn');
+const closeThanks = document.getElementById('close-btn-thanks');
 const reserveForm = document.getElementById('reserveForm');
 const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
 const email = document.getElementById('email');
 const birthdate = document.getElementById('birthdate');
 const submit = document.getElementById('submit');
+const thankYou = document.getElementById('thank-you');
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener('click', launchModal));
@@ -51,7 +53,6 @@ function validName(inputName) {
   let regexp = new RegExp('^[a-zA-Z]+[a-z-]{1,}$', 'g');
   let testName = regexp.test(inputName.value);
   let small = inputName.nextElementSibling;
-
   if (testName) {
     small.innerHTML = '';
     return true;
@@ -74,7 +75,6 @@ function validEmail(inputEmail) {
   );
   let testEmail = regexp.test(inputEmail.value);
   let small = inputEmail.nextElementSibling;
-
   if (testEmail) {
     small.innerHTML = '';
     return true;
@@ -84,55 +84,61 @@ function validEmail(inputEmail) {
   }
 }
 
-// Listening if the number of tournament participation is correct
-reserveForm.quantity.addEventListener('input', function () {
-  
-  let small = this.nextElementSibling;
-
-  if (this.value >= 0 && this.value <= 99) {
+// Creating the function to verify if the user added his birthday
+function dateCheck() {
+  let small = reserveForm.birthdate.nextElementSibling;
+  if (!reserveForm.birthdate.value) {
+    small.innerHTML = 'Veuillez indiquer votre date de naissance';
+    small.classList.add('small-cgv');
+    return false;
+  } else {
     small.innerHTML = '';
+    small.classList.remove('small-cgv');
+    return true;
+  }
+}
+
+// Listening if the number of tournament participation is correct
+function qtyCheck(inputQty) {
+  let small = inputQty.nextElementSibling;
+  if (inputQty.value != '' && inputQty.value >= 0 && inputQty.value <= 99) {
+    small.innerHTML = '';
+    return true;
   } else {
     small.innerHTML = 'Veuillez renseigner une valeur comprise entre 0 et 99';
+    return false;
   }
+}
+
+reserveForm.quantity.addEventListener('input', function () {
+  qtyCheck(this);
 });
 
 // Listening if a location is selected
-reserveForm.addEventListener('change', function () {
-  locationSelect();
-});
-
 function locationSelect() {
   const radioSelect = document.querySelectorAll('input[name="location"]');
-  let radioValue;
+  let small = document.getElementById('radio-wrapper').nextElementSibling;
+  let radioValue = false;
   for (const choice of radioSelect) {
     if (choice.checked) {
-      console.log(choice.value);
-      radioValue = choice.value;
-    } 
+      radioValue = true;
+      break;
+    }
   }
   if (!radioValue) {
-    console.log('merci de saisir une location');
-    return false;
+    small.innerHTML = 'Merci de saisir une location';
+    small.classList.add('small-cgv');
   } else {
-    console.log('ok location');
-    return true;
+    small.innerHTML = '';
+    small.classList.remove('small-cgv');
   }
-};
+  return radioValue;
+}
 
-// Listening if a radio button is selected
-reserveForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  if (validName(reserveForm.first) && validName(reserveForm.last) && validEmail(reserveForm.email)){
-    console.log("on peut envoyer");
-  } else {
-    console.log("il manque une ou plusieurs données correctes");
-  }
-
-  // Listening if the terms and conditions checkbox is checked
+// Listening if the terms and conditions checkbox is checked
+function cgvSelect() {
   let checkBoxValidation = document.getElementById('checkbox1').checked;
   let small = document.getElementById('cgv-label').nextElementSibling;
-
   if (!checkBoxValidation) {
     small.innerHTML = "Veuillez accepter les conditions d'utilisation";
     small.classList.add('small-cgv');
@@ -140,5 +146,42 @@ reserveForm.addEventListener('submit', function (e) {
   } else {
     small.innerHTML = '';
     return true;
+  }
+}
+
+// Creating the thank you page
+function thankYouPage() {
+  // Removing the display none and adding the right class to show the thank you page
+  thankYou.classList.remove('hidden');
+  thankYou.classList.add('thank-you-bg');
+  thankYou.innerHTML = 'Merci, votre inscription a bien été prise en compte !';
+  // Adding the span contening the close icon
+  const closeBtn = document.createElement('span');
+  thankYou.appendChild(closeBtn);
+  closeBtn.classList.add('close');
+  // Closing the thank you page when clicking on the close icon
+  closeBtn.addEventListener('click', function () {
+    thankYou.classList.add('hidden');
+    thankYou.classList.remove('thank-you-bg');
+  });
+}
+
+// Creating the function to send the thank you page to the user when the form is sent
+reserveForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  if (
+    // All of the below functions return true
+    validName(reserveForm.first) &&
+    validName(reserveForm.last) &&
+    validEmail(reserveForm.email) &&
+    dateCheck() &&
+    qtyCheck(reserveForm.quantity) &&
+    locationSelect() &&
+    cgvSelect()
+  ) {
+    // Then close the form, reset it and show the thank you page
+    closeModal();
+    reserveForm.reset();
+    thankYouPage();
   }
 });
