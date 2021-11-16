@@ -126,7 +126,7 @@ function locationSelect() {
     }
   }
   if (!radioValue) {
-    small.innerHTML = 'Merci de saisir une location';
+    small.innerHTML = "Merci d'indiquer une ville";
     small.classList.add('small-cgv');
   } else {
     small.innerHTML = '';
@@ -154,8 +154,9 @@ function thankYouPage() {
   // Removing the display none and adding the right class to show the thank you page
   thankYou.classList.remove('hidden');
   thankYou.classList.add('thank-you-bg');
-  thankYou.innerHTML = 'Merci, votre inscription a bien été prise en compte !';
-  // Adding the span contening the close icon
+  thankYou.innerHTML =
+    '<p>Merci, votre inscription a bien été prise en compte !</p>';
+  // Adding the span containing the close icon
   const closeBtn = document.createElement('span');
   thankYou.appendChild(closeBtn);
   closeBtn.classList.add('close');
@@ -164,13 +165,21 @@ function thankYouPage() {
     thankYou.classList.add('hidden');
     thankYou.classList.remove('thank-you-bg');
   });
+  const closeRedBtn = document.createElement('button');
+  thankYou.appendChild(closeRedBtn);
+  closeRedBtn.classList.add('btn-signup', 'modal-btn');
+  closeRedBtn.innerText = 'Fermer';
+  closeRedBtn.addEventListener('click', function () {
+    thankYou.classList.add('hidden');
+    thankYou.classList.remove('thank-you-bg');
+  });
 }
 
-// Creating the function to send the thank you page to the user when the form is sent
+// Creating the function to prompt the thank you page when the user submits the form
 reserveForm.addEventListener('submit', function (e) {
   e.preventDefault();
   if (
-    // All of the below functions return true
+    // All of the required fields are correct (functions return true)
     validName(reserveForm.first) &&
     validName(reserveForm.last) &&
     validEmail(reserveForm.email) &&
